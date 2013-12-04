@@ -23,7 +23,7 @@ add_lib_static(${libname} "library" "library/src")
 
 # Declare application
 add_local_dependency(${libname})
-add_app(${appname} "samples")
+add_app(${appname} "sample")
 
 # Declare unit tests
 add_app(${testname} "test")
