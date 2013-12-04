@@ -1,5 +1,5 @@
 /* Copyright 2013 Andrey Golodyaev */
-#include <complexcalc.h>
+#include <library/complexcalc.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -25,7 +25,7 @@ void ComplexCalculator::SetReal(double _real) {
 void ComplexCalculator::SetImaginary(double _imaginary) {
     imaginary = _imaginary;
 }
-void ComplexCalculator::Input(char *str) {
+bool ComplexCalculator::Input(char *str) {
     std::string s = str;
     std::string i = "";
     std::basic_string<char>::size_type n = 1;
@@ -40,8 +40,7 @@ void ComplexCalculator::Input(char *str) {
             && (s[iii] != 'i')
             && (s[iii] != '+') && (s[iii] != '-') && (s[iii] != '*')
             && (s[iii] != '/'))) {
-            printf("Wrong number format!\n");
-            exit(2);
+            return false;
         }
     }
     int qr = 1, qi = 1;
@@ -62,15 +61,13 @@ void ComplexCalculator::Input(char *str) {
         }
         i.erase(i.find('i'), 1);
         if (i.find("i") > 0 && i.find("i") < i.length()-1) {
-            printf("Wrong number format!\n");
-            exit(2);
+            return false;
         }
         s.erase(s.find(i)-1, i.length()+1);
         i.erase(i.find('i'), 1);
         if (sh > 0) i.erase(i.find('*'), 1);
         if (sh > 0 && i == "") {
-            printf("Wrong number format!\n");
-            exit(2);
+            return false;
         }
         if (i == "") imaginary = 1;
         else
@@ -78,8 +75,7 @@ void ComplexCalculator::Input(char *str) {
                 imaginary = atof(i.c_str());
             }
             catch(...) {
-                printf("Wrong number format!\n");
-                exit(2);
+                return false;
             }
         imaginary*=qi;
     } else {
@@ -98,9 +94,10 @@ void ComplexCalculator::Input(char *str) {
             real = atof(s.c_str());
         }
         catch(...) {
-                printf("Wrong number format!\n");
+            return false;
         }
     real*=qr;
+    return true;
 }
 void ComplexCalculator::Output(char *str) {
     std::string str1 = "";
@@ -161,9 +158,7 @@ ComplexCalculator ComplexCalculator::Div(ComplexCalculator first,
        +second.GetImaginary()*second.GetImaginary() < ep &&
        second.GetReal()*second.GetReal()
        +second.GetImaginary()*second.GetImaginary() > -ep) {
-    printf("Division by zero!\n");
-    exit(4);
-    }
+           throw std::string("division by zero");    }
     temp.real = (first.GetReal()*second.GetReal()
                 +first.GetImaginary()*second.GetImaginary())/
                 (second.GetReal()*second.GetReal()
