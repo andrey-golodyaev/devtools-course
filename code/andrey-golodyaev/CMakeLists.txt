@@ -4,6 +4,7 @@
 
 set(libname "andrey-golodyaev-calc-library")
 set(appname "andrey-golodyaev-calc-sample")
+set(testname "andrey-golodyaev-calc-test")
 
 message("")
 message("############################################")
